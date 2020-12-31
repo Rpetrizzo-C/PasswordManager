@@ -46,7 +46,7 @@ def get_password(admin_pass, service):
     file_string = ""
     for row in cursor:
         file_string = row[0]
-    return create_password(file_string, admin_pass)
+    return create_password(secret_key, file_string, admin_pass)
 def list_services(admin_pass):
     cur = conn.cursor()
     cur.execute("SELECT Services from KEYS")
