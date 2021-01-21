@@ -3,9 +3,10 @@
 # PasswordManager
 ---
 Sign with master password or create one:
-  *Create passwords
-  *Store passwords
-    *Encrypted
-  *Sort passwords 
+
+  * Create passwords
+  * Store passwords
+    * Encrypted
+  * Sort passwords 
   
   [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
