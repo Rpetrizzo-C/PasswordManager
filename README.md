@@ -7,6 +7,6 @@ Sign with master password or create one:
   * Create passwords
   * Store passwords
     * Encrypted
-  * Sort passwords ###(WIP)
+  * Sort passwords ### (WIP)
   
   [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
