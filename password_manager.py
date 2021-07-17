@@ -2,36 +2,19 @@
 import sqlite3
 from hashlib import sha256
 
+MASTERPW = "petrigod"
+
+PASSWORD = input("ENTER THE MASTER PASSWORD :-")
+
+while MASTERPW != PASSWORD:
+    if MASTERPW != PASSWORD:
+        print("Invalid Password\n")
+        break
+    
+if MASTERPW == PASSWORD:
+        print("WELCOME BACK SIR :)")
 
 conn = sqlite3.connect('pass_manager.db')
-
-connect = input("Es tu primera vez en la app?\n")
-conn.execute('''CREATE TABLE IF NOT EXISTS KEYAD
-            (PASS_KEY TEXT PRIMARY KEY);''')
-if connect == "si":
-    contraseña = str(input("Ingresa tu contraseña\n"))
-
-    ADMIN_PASSWORD = contraseña
-
-    cur = conn.cursor()
-    cur.execute('INSERT INTO KEYAD(PASS_KEY) VALUES (?);',(ADMIN_PASSWORD,))
-
-
-else:
-    cur = conn.cursor()
-    cur.execute('''SELECT PASS_KEY FROM KEYAD''')
-    contraseña = cur.fetchone()
-    contraseña = ''.join(contraseña)
-    cur.close()
-    ADMIN_PASSWORD = contraseña
-
-
-connect = input("Cual es tu contraseña?\n")
-
-while connect != ADMIN_PASSWORD:
-    connect = input("Cual es tu contraseña?\n")
-    if connect == "q":
-        break
 
 def create_password(pass_key, service, admin_pass):
     return sha256(admin_pass.encode('utf-8') + service.lower().encode('utf-8') + pass_key.encode('utf-8')).hexdigest()[:15]
@@ -46,55 +29,41 @@ def get_password(admin_pass, service):
     file_string = ""
     for row in cursor:
         file_string = row[0]
-    return create_password(secret_key, file_string, admin_pass)
-def list_services(admin_pass):
-    cur = conn.cursor()
-    cur.execute("SELECT Services from KEYS")
-    services = cur.fetchall()
-    for n in services:
-        ''.join(n)
-        str =  ''.join(n) 
-        print(str)
-    cur.close()
+    return create_password(file_string, service, admin_pass)
+
 def add_password(service, admin_pass):
     secret_key = get_hex_key(admin_pass, service)
 
-    command = 'INSERT INTO KEYS (PASS_KEY, Services) VALUES (%s, %s);'%('"' + secret_key +'"','"'+service+'"') 
-         
+    command = 'INSERT INTO KEYS (PASS_KEY) VALUES (%s);' %('"' + secret_key +'"')        
     conn.execute(command)
     conn.commit()
     return create_password(secret_key, service, admin_pass)
 
-if connect == ADMIN_PASSWORD:
+if MASTERPW == PASSWORD:
     try:
         conn.execute('''CREATE TABLE KEYS
             (PASS_KEY TEXT PRIMARY KEY NOT NULL);''')
-        print("Tu contraseña de administrador ha sido creada!\nQue haras hoy?")
+        print("Your safe has been created!\nWhat would you like to store in it today?")
     except:
-        print("Has ingresado correctamente, Que haras hoy?")
+        print("You have a safe, what would you like to do today?")
     
     
     while True:
         print("\n"+ "*"*15)
-        print("Comandos:")
-        print("q = Cerrar programa")
-        print("bc = Buscar contraseña")
-        print("ls = Listar Servicios")
-        print("gc = Guardar contraseña")
+        print("Commands:")
+        print("Press 1 : TO Genrate a Password")
+        print("Press 2 : To Get Stored Password")
+        print("Press 3 : Quit")
         print("*"*15)
         input_ = input(":")
 
-        if input_ == "q":
+        if input_ == "3":
             break
-        if input_ == "gc":
-            service = input("Cual es el servicio?\n")
-            print("\n" + service.capitalize() + " password created:\n" + add_password(service, ADMIN_PASSWORD))
-        if input_ == "bc":
-            service = input("Cual es el servicio?\n")
-            print("\n" + service.capitalize() + " password:\n"+get_password(ADMIN_PASSWORD, service))
-        if input_ == "ls":
-            print("\n")
-            list_services(ADMIN_PASSWORD)    
-
+        if input_ == "1":
+            service = input("What is the name of the service?\n")
+            print("\n" + service.capitalize() + " password created:\n" + add_password(service, MASTERPW))
+        if input_ == "2":
+            service = input("What is the name of the service?\n")
+            print("\n" + service.capitalize() + " password:\n" +get_password(MASTERPW, service))
 
 
